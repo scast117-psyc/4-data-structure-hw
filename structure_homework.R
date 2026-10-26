@@ -136,11 +136,12 @@ print(rs_joined)
 # Which decade improved the most?
 
 #ANSWER
-rs_joined <- rs_joined %>% mutate(Decades = floor(Year_Old/10)*10)
+rs_joined <- rs_joined %>% mutate(Decades_Old = floor(Year_Old/10)*10)
 rs_joined
 rs_joined <- rs_joined %>% mutate(Decades_New = floor(Year_New/10)*10)
+rs_joined <- rs_joined %>% mutate(Decades_New = str_c(Decades_New, "s"))
+rs_joined <- rs_joined %>% mutate(Decades_Old = str_c(Decades_Old, "s"))
 rs_joined
-
 
 ### Question 7 ----------
 
@@ -150,9 +151,13 @@ rs_joined
 # proportion of songs in each of the top three decades (vs. all the rest)
 
 #ANSWER
-fct_count(rs_joined$Song)
-rs_joined %>% mutate(Song = fct_lump(Song, n = 3))
-fct_count(rs_joined$Song)
+fct_count(rs_joined$Decades_New)
+fct_count(rs_joined$Decades_Old)
+new_lump <- fct_lump(rs_joined$Decades_New, n =3, other_level = "Other")
+old_lump <- fct_lump(rs_joined$Decades_Old, n=3, other_level = "Other")
+fct_count(new_lump, prop = TRUE)
+fct_count(old_lump, prop = TRUE)
+
 ### Question 8 ---------- 
 
 # Read the file "top_20.csv" into a tibble called top20
@@ -164,6 +169,8 @@ library(readr)
 top_20 <- read_csv("top_20.csv")
 View(top_20)
 ?parse_date_time
+top_20 <- top_20 %>% mutate(Parse=parse_date_time(Release, "dmy"))
+
 ### Question 9 --------
 
 # top20's Style and Value are mixing two different variables into one column
@@ -171,8 +178,7 @@ View(top_20)
 # overwrite top20 with the pivoted data (there should now be 20 rows!)
 
 #ANSWER
-
-
+top_20 <- top_20 %>% pivot_wider(names_from = "Style", values_from = "Value")
 
 ### Question 10 ---------
 
@@ -185,8 +191,16 @@ View(top_20)
 # Count the number of songs that were released in each season
 
 #ANSWER
-
-
+?left_join
+top_20_joined <- left_join(top_20, rs_joined, by = c("Artist", "Song")) 
+?month
+top_20_joined$Release_month <- month(top_20_joined$Parse, label = T)
+top_20_joined <- top_20_joined |> mutate(season = fct_collapse(Release_month, 
+        Winter = c("Dec", "Jan", "Feb"), 
+        Spring = c("Mar", "Apr", "May"), 
+        Summer = c("Jun", "Jul", "Aug"), 
+        Fall = c("Sep", "Oct", "Nov")))
+fct_count(top_20_joined$season)
 
 ### Question 11 ---------
 
@@ -196,6 +210,12 @@ View(top_20)
 # Figure out which is the top-ranked song (from Rank_New) that used a minor key
 
 #ANSWER
+fct_count(top_20$Key)
+?fct_collapse
+top_20_joined <- top_20_joined %>% 
+  mutate(Quality = str_detect(Key, "m")) |> 
+  mutate(Quality = ifelse(Quality, "Minor", "Major"))
 
-
-
+top_20_joined %>% filter(Quality == "Minor") %>% 
+  arrange(Rank_New)
+#God only knows 
