@@ -39,8 +39,11 @@ load("rs_data.RData")
 
 #ANSWER
 ?full_join
-full_join(rs_new, rs_old, by = "Artist", "Song", relationship = "many-to-many")
-
+rs_joined_orig <- full_join(rs_new, rs_old, by = "Artist", "Song", relationship = "many-to-many")
+rs_joined_orig
+nrow(rs_joined_orig)
+#1423 rows 
+#There's lots of NAs and repeated songs 
 
 ### Question 2 ---------- 
 
