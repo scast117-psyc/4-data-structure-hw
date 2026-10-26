@@ -43,7 +43,7 @@ rs_joined_orig <- full_join(rs_new, rs_old, by = "Artist", "Song", relationship 
 rs_joined_orig
 nrow(rs_joined_orig)
 #1423 rows 
-#There's lots of NAs and repeated songs 
+#There's lots of NAs and repeated songs? 
 
 ### Question 2 ---------- 
 
@@ -54,7 +54,17 @@ nrow(rs_joined_orig)
 # Make Rank and Year into integer variables for rs_old before binding them into rs_all
 
 #ANSWER
-
+rs_new <- rs_new %>% mutate(rs_new, "Source"= "New")
+print(rs_new)
+rs_old <- rs_old %>% mutate(rs_old, "Source" = "Old")
+print(rs_old)
+rs_old$Rank <- as.numeric(rs_old$Rank)
+is.numeric(rs_old$Rank)
+rs_old$Year <- as.numeric(rs_old$Year)
+is.numeric(rs_old$Year)
+?bind_rows
+rs_all <- bind_rows(rs_old, rs_new)
+print(rs_all)
 
 ### Question 3 ----------
 
