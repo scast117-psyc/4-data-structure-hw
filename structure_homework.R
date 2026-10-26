@@ -136,9 +136,9 @@ print(rs_joined)
 # Which decade improved the most?
 
 #ANSWER
-rs_joined <- rs_joined %>% mutate(Year_Old = floor(Year_Old/10)*10)
+rs_joined <- rs_joined %>% mutate(Decades = floor(Year_Old/10)*10)
 rs_joined
-rs_joined <- rs_joined %>% mutate(Year_New = floor(Year_New/10)*10)
+rs_joined <- rs_joined %>% mutate(Decades_New = floor(Year_New/10)*10)
 rs_joined
 
 
@@ -150,9 +150,9 @@ rs_joined
 # proportion of songs in each of the top three decades (vs. all the rest)
 
 #ANSWER
-
-
-
+fct_count(rs_joined$Song)
+rs_joined %>% mutate(Song = fct_lump(Song, n = 3))
+fct_count(rs_joined$Song)
 ### Question 8 ---------- 
 
 # Read the file "top_20.csv" into a tibble called top20
@@ -160,8 +160,10 @@ rs_joined
 # Use parse_date_time to fix it
 
 #ANSWER
-
-
+library(readr)
+top_20 <- read_csv("top_20.csv")
+View(top_20)
+?parse_date_time
 ### Question 9 --------
 
 # top20's Style and Value are mixing two different variables into one column
