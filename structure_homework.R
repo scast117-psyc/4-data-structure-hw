@@ -106,6 +106,10 @@ print(rs_old_1)
 ?full_join
 rs_joined <- full_join(rs_new_1, rs_old_1, by = c("Artist", "Song"), suffix = c("_Old", "_New"))
 nrow(rs_joined)
+print(rs_joined)
+#slay 799 rows 
+#Yes it improved
+
 ### Question 5 ----------
 
 # Let's clean up rs_joined with the following steps:
@@ -117,8 +121,11 @@ nrow(rs_joined)
 # You should now be able to see how each song moved up/down in rankings between the two lists
 
 #ANSWER
-
-
+rs_joined <- rs_joined %>% select(-Source_New) %>% drop_na(Rank_New, Rank_Old)
+rs_joined
+rs_joined$Rank_Change <- rs_joined$Rank_Old - rs_joined$Rank_New 
+rs_joined <- arrange(rs_joined, (Rank_Change))
+print(rs_joined)
 ### Question 6 ----------
 
 # Add a new variable to rs_joined that takes the year and turns it into a decade with "s" at the end
