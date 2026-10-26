@@ -38,8 +38,8 @@ load("rs_data.RData")
 # Why did some of the artist-song fail to match up?
 
 #ANSWER
-
-
+?full_join
+full_join(rs_new, rs_old, by = "Artist", "Song", relationship = "many-to-many")
 
 ### Question 2 ---------- 
 
