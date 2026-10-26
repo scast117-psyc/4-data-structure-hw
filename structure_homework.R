@@ -95,8 +95,17 @@ print(rs_all)
 # in the new rs_joined compared to the original. Use nrow to check (there should be 799 rows)
 
 #ANSWER
+rs_new_1 <- rs_all %>%
+  filter(Source == "New")
+print(rs_new_1)
 
+rs_old_1 <- rs_all %>% 
+  filter(Source == "Old") 
+print(rs_old_1)
 
+?full_join
+rs_joined <- full_join(rs_new_1, rs_old_1, by = c("Artist", "Song"), suffix = c("_Old", "_New"))
+nrow(rs_joined)
 ### Question 5 ----------
 
 # Let's clean up rs_joined with the following steps:
