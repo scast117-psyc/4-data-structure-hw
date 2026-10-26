@@ -126,6 +126,7 @@ rs_joined
 rs_joined$Rank_Change <- rs_joined$Rank_Old - rs_joined$Rank_New 
 rs_joined <- arrange(rs_joined, (Rank_Change))
 print(rs_joined)
+
 ### Question 6 ----------
 
 # Add a new variable to rs_joined that takes the year and turns it into a decade with "s" at the end
@@ -135,7 +136,10 @@ print(rs_joined)
 # Which decade improved the most?
 
 #ANSWER
-
+rs_joined <- rs_joined %>% mutate(Year_Old = floor(Year_Old/10)*10)
+rs_joined
+rs_joined <- rs_joined %>% mutate(Year_New = floor(Year_New/10)*10)
+rs_joined
 
 
 ### Question 7 ----------
